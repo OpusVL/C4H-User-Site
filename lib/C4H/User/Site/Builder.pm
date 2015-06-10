@@ -6,9 +6,35 @@ extends 'OpusVL::Website::Builder';
 override _build_plugins => sub {
     my $plugins = super(); # Get what CatalystX::AppBuilder gives you
 
-#    push @$plugins, '+OpusVL::AppKitX::CMS::Odoo::Unsubscribe';
+    push @$plugins, '+Code4Health::AppKitX::Users';
 
     return $plugins;
+};
+
+override _build_config => sub 
+{
+    my $self   = shift;
+    my $config = super(); # Get what CatalystX::AppBuilder gives you
+
+    $config->{'Plugin::Authentication'} =
+    {
+            default_realm   => 'ldap',
+            ldap          =>
+            {
+                credential =>
+                {
+                   class              => 'Password',
+                   password_type      => 'self_check',
+                },
+                store =>
+                {
+                   class              => 'DBIx::Class',
+                   user_model         => 'Users::Person',
+                }
+            },
+    };
+
+    return $config;
 };
 
 1;

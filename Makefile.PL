@@ -11,6 +11,7 @@ all_from 'lib/OpusVL/Company/Website.pm';
 
 requires 'OpusVL::Website';
 requires 'OpusVL::AppKitX::CMS::Odoo::Unsubscribe';
+requires 'Code4Health::AppKitX::Users';
 
 catalyst;
 
