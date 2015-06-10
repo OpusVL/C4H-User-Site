@@ -1,0 +1,15 @@
+/inc/
+OpusVL-Website-*.tar.gz
+/Makefile
+/META.yml
+/MYMETA.yml
+/META.json
+/MYMETA.json
+/MANIFEST.bak
+/pm_to_blib
+/blib/
+/start.sh
+/schwartz.sh
+*.swp
+*_local.conf
+.DS_Store
