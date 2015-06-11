@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use C4H::User::Site::Builder;
 
-our $VERSION = "0.08";
+our $VERSION = "0.09";
 
 my $builder = C4H::User::Site::Builder->new(
     appname => __PACKAGE__,
