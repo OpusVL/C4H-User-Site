@@ -9,7 +9,7 @@ use Module::Install::Catalyst; # Complain loudly if you don't have
 name 'C4H-User-Site';
 all_from 'lib/C4H/User/Site.pm';
 
-requires 'OpusVL::Website';
+requires 'OpusVL::Website' => 0.08;
 requires 'Code4Health::AppKitX::Users';
 
 catalyst;
