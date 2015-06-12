@@ -4,7 +4,7 @@ use Moose;
 extends 'OpusVL::Website::Builder';
 
 override _build_plugins => sub {
-    my $plugins = super(); # Get what CatalystX::AppBuilder gives you
+    my $plugins = super(); # Get what OpusVL::Website::Builder gives you
 
     push @$plugins, qw/
         +Code4Health::AppKitX::Users
@@ -16,7 +16,7 @@ override _build_plugins => sub {
 override _build_config => sub 
 {
     my $self   = shift;
-    my $config = super(); # Get what CatalystX::AppBuilder gives you
+    my $config = super(); # Get what OpusVL::Website::Builder gives you
 
     $config->{'Controller::Login'} =
     {
