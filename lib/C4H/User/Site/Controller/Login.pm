@@ -4,8 +4,6 @@ use Moose;
 use C4H::User::Site::HTML::FormHandler::Bootstrap3;
 BEGIN {extends 'CatalystX::SimpleLogin::Controller::Login';}
 
-with 'OpusVL::AppKit::RolesFor::Controller::GUI';
-
 has '+render_login_form_stash_key' => (
     default => 'render_form'
 );
