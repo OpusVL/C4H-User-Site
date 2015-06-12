@@ -6,7 +6,9 @@ extends 'OpusVL::Website::Builder';
 override _build_plugins => sub {
     my $plugins = super(); # Get what CatalystX::AppBuilder gives you
 
-    push @$plugins, '+Code4Health::AppKitX::Users';
+    push @$plugins, qw/
+        +Code4Health::AppKitX::Users
+    /;
 
     return $plugins;
 };
@@ -15,6 +17,11 @@ override _build_config => sub
 {
     my $self   = shift;
     my $config = super(); # Get what CatalystX::AppBuilder gives you
+
+    $config->{'Controller::Login'} =
+    {
+        traits => '+OpusVL::AppKit::TraitFor::Controller::Login::NewSessionIdOnLogin',
+    };
 
     $config->{'Plugin::Authentication'} =
     {
