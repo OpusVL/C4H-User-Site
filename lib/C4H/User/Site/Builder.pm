@@ -1,6 +1,7 @@
 package C4H::User::Site::Builder;
 
 use Moose;
+use File::ShareDir;
 extends 'OpusVL::Website::Builder';
 
 override _build_plugins => sub {
@@ -17,6 +18,12 @@ override _build_config => sub
 {
     my $self   = shift;
     my $config = super(); # Get what OpusVL::Website::Builder gives you
+
+    $config->{'Controller::HTML::FormFu'}->{constructor}->{config_file_path} = [];
+    $config->{'Controller::HTML::FormFu'}->{constructor}->{render_method} = 'tt';
+    $config->{'Controller::HTML::FormFu'}->{constructor}->{tt_args} = {
+        INCLUDE_PATH => File::ShareDir::module_dir('C4H::User::Site').'/root/formfu'
+    };
 
     $config->{'Controller::Login'} =
     {
