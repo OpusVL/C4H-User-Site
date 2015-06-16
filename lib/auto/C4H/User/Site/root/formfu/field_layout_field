@@ -6,6 +6,7 @@
     </datalist>
 [% END %]
 [% self.attributes.class = self.attributes.class _ " form-control" %]
+[% self.attributes.class = self.attributes.class.replace('label', '') %]
 <input
     type="[% self.field_type %]"
     [% IF self.nested_name.defined %]
