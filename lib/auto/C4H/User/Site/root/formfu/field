@@ -1,5 +1,4 @@
 [% self.container_attributes.class = self.container_attributes.class _ " form-group" %]
-[% self.container_attributes.class = self.container_attributes.class.replace('label', '') %]
 <div[% process_attrs(self.container_attributes) %]>
     [% content %]
 </div>

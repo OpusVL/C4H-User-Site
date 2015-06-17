@@ -19,6 +19,8 @@ override _build_config => sub
     my $self   = shift;
     my $config = super(); # Get what OpusVL::Website::Builder gives you
 
+    $config->{no_formfu_classes} = 1;
+
     $config->{'Controller::HTML::FormFu'}->{constructor}->{config_file_path} = [];
     $config->{'Controller::HTML::FormFu'}->{constructor}->{render_method} = 'tt';
     $config->{'Controller::HTML::FormFu'}->{constructor}->{tt_args} = {
