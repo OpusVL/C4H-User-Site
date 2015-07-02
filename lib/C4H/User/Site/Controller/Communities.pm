@@ -43,6 +43,8 @@ sub apply_for_community
         $c->flash->{success_msg} = "Thank You. Your response was sent";
         $c->res->redirect($c->req->uri);
     }
+
+    $c->stash->{render_form} = $form->render;
     $c->detach(qw/Controller::Root default/);
 }
 
