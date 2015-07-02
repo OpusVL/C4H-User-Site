@@ -11,7 +11,8 @@ all_from 'lib/C4H/User/Site.pm';
 
 requires 'OpusVL::Website' => 0.08;
 requires 'Code4Health::AppKitX::Users';
-
+requires 'Email::MIME';
+requires 'Email::Sender::Simple';
 test_requires 'OpusVL::AppKitX::PreferencesAdmin';
 
 catalyst;
