@@ -16,6 +16,8 @@ requires 'Code4Health::DB' => 0.05;
 requires 'Code4Health::LDAP';
 requires 'Email::MIME';
 requires 'Email::Sender::Simple';
+requires 'Template::Plugin::JSON';
+
 test_requires 'OpusVL::AppKitX::PreferencesAdmin';
 
 catalyst;
