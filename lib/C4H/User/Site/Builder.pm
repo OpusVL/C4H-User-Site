@@ -50,6 +50,8 @@ override _build_config => sub
             },
     };
 
+    $config->{'View::CMS::Page'}->{AUTO_FILTER} = 'html';
+
     return $config;
 };
 

@@ -1,10 +1,9 @@
-[% self.attributes.class = self.attributes.class _ " checkbox" %]
 <div [% process_attrs(self.attributes) %]>
     [% FOREACH option = self.options %]
         [% IF option.group %]
-            <span[% process_attrs(option.attributes) %]>
+            <div[% process_attrs(option.attributes) %]>
                 [% FOREACH item = option.group %]
-                    <span[% process_attrs(item.container_attributes) %]>
+                    <div[% process_attrs(item.container_attributes) %]>
                         [% IF self.reverse_group %]
                             <label
                                 [% process_attrs(item.label_attributes) %]
@@ -28,11 +27,12 @@
                                 />
                             </label>
                         [% END %]
-                    </span>
+                    </div>
                 [% END %]
-            </span>
+            </div>
         [% ELSE %]
-            <span[% process_attrs(option.container_attributes) %]>
+            [% option.container_attributes.class = option.container_attributes.class _ " checkbox" %]
+            <div[% process_attrs(option.container_attributes) %]>
                 [% IF self.reverse_group %]
                     <label[% process_attrs(option.label_attributes) %]>
                         <input 
@@ -54,7 +54,7 @@
                         />
                     </label>
                 [% END %]
-            </span>
+            </div>
         [% END %]
     [% END %]
 </div>

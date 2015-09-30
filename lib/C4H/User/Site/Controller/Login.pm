@@ -32,6 +32,11 @@ after 'login' => sub {
 
 after 'reset_password' => sub {
     my ($self, $c) = @_;
+
+    $self->reset_password_form
+        ->field('username')
+        ->label('Email Address');
+
     $c->detach(qw/Controller::Root default/);
 };
 

@@ -41,8 +41,18 @@ sub apply_for_community
 
         sendmail($msg);
         $c->flash->{success_msg} = "Thank you. Your application has been forwarded to one of our team who will be in touch shortly";
+
+        $c->stash->{email} = {
+            to => $c->config->{mailto_address},
+            from => $c->config->{system_email_address},
+            subject => "New Code4Health supporter application",
+            body => $full_msg,
+        };
+        $c->forward($c->view('Email'));
         $c->res->redirect($c->req->uri);
     }
+
+    $c->stash->{render_form} = $form->render;
     $c->detach(qw/Controller::Root default/);
 }
 
