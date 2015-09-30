@@ -17,6 +17,7 @@ requires 'Code4Health::LDAP' => "0.05";
 requires 'Email::MIME' => "1.929";
 requires 'Email::Sender::Simple' => "1.300018";
 requires 'Template::Plugin::JSON' => "0.06";
+requires 'OpusVL::AppKitX::SysParams';
 
 test_requires 'OpusVL::AppKitX::PreferencesAdmin' => "0.02";
 
