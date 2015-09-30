@@ -26,20 +26,7 @@ sub apply_for_community
         for my $field (@fields) {
             $full_msg .= "${field}: " . $c->req->body_params->{$field} . "\n";
         }
-        my $msg = Email::MIME->create(
-            header_str => [
-                From    => 'communities.code4health@nhs.net',
-                To      => $c->config->{mailto_address}, 
-                Subject => "Apply for community",
-            ],
-            attributes => {
-                encoding => 'quoted-printable',
-                charset  => 'ISO-8859-1',
-            },
-            body_str => $full_msg,
-        );
 
-        sendmail($msg);
         $c->flash->{success_msg} = "Thank you. Your application has been forwarded to one of our team who will be in touch shortly";
 
         $c->stash->{email} = {
