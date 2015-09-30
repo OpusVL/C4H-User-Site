@@ -40,7 +40,7 @@ sub apply_for_community
         );
 
         sendmail($msg);
-        $c->flash->{success_msg} = "Thank You. Your response was sent";
+        $c->flash->{success_msg} = "Thank you. Your application has been forwarded to one of our team who will be in touch shortly";
         $c->res->redirect($c->req->uri);
     }
     $c->detach(qw/Controller::Root default/);
