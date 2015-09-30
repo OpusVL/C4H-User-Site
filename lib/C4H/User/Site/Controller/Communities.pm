@@ -4,6 +4,7 @@ use Moose;
 use Email::MIME;
 use Email::Sender::Simple qw(sendmail);
 use Code4Health::DB::Form::Communities::Apply;
+use Template::Alloy;
 
 BEGIN {
     extends 'Catalyst::Controller::HTML::FormFu';
@@ -36,6 +37,25 @@ sub apply_for_community
             body => $full_msg,
         };
         $c->forward($c->view('Email'));
+
+        # Now send a reference email to the Customer
+        # Required params: signup.community.email and signup.community.subject
+        my $subject = $c->model('SysParams::SysInfo')->get('signup.community.subject');
+        my $message = $c->model('SysParams::SysInfo')->get('signup.community.email');
+        
+        if ($subject and $message) {
+            my $out_msg = '';
+            my $t       = Template::Alloy->new;
+            $t->process(\$message, $c->req->body_params, \$out_msg);
+            $c->stash->{email} = {
+                to      => $form->field('email_address')->value,
+                from    => $c->config->{system_email_address},
+                subject => $subject,
+                body    => $out_msg,
+            };
+
+            $c->forward($c->view('Email'));
+        }
 
         $c->res->redirect($c->req->uri);
     }

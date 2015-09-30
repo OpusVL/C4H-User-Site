@@ -36,6 +36,26 @@ sub apply_for_community
             body => $full_msg,
         };
         $c->forward($c->view('Email'));
+        
+        # Now send a reference email to the Customer
+        # Required params: signup.supporter.email and signup.supporter.subject
+        my $subject = $c->model('SysParams::SysInfo')->get('signup.supporter.subject');
+        my $message = $c->model('SysParams::SysInfo')->get('signup.supporter.email');
+
+        if ($subject and $message) {
+            my $out_msg = '';
+            my $t       = Template::Alloy->new;
+            $t->process(\$message, $c->req->body_params, \$out_msg);
+            $c->stash->{email} = {
+                to      => $form->field('email_address')->value,
+                from    => $c->config->{system_email_address},
+                subject => $subject,
+                body    => $out_msg,
+            };
+
+            $c->forward($c->view('Email'));
+        }
+
         $c->res->redirect($c->req->uri);
     }
 
