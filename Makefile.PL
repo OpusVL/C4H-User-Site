@@ -23,7 +23,7 @@ test_requires 'OpusVL::AppKitX::PreferencesAdmin' => "0.02";
 
 catalyst;
 
-install_script glob('script/*.pl');
+install_script glob('bin/*.pl');
 auto_install;
 resources (
     repository => {
