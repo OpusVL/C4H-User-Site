@@ -22,15 +22,71 @@ sub preprocess {
     
     if ($c->config->{apperta_site}) {
         # BLOGS
+        
         if ($me->blog or ($me->parent and $me->parent->blog)) {
-            
+        
+            # ARCHIVES
+            if ($c->req->query_params->{archive}) {
+                my $months = {
+                    ''              => 0,
+                    'January'       => 1,
+                    'February'      => 2,
+                    'March'         => 3,
+                    'April'         => 4,
+                    'May'           => 5,
+                    'June'          => 6,
+                    'July'          => 7,
+                    'August'        => 8,
+                    'September'     => 9,
+                    'October'       => 10,
+                    'November'      => 11,
+                    'December'      => 12
+                };
+                
+                my $arc = $c->req->query_params->{archive};
+                my ($month, $year) = split ' ', $arc;
+                my $start_date = DateTime->new(month => $months->{$month}, year => $year);
+                my $end_date = $start_date->clone->add( months => 1 )->subtract( days => 1 );
+                my $blogs = $site->pages->attribute_search({ 'blog_category' => { '!=' => undef } });
+                my $dtf = $c->model('CMS::Page')->result_source->schema->storage->datetime_parser;
+                my $archived = $site->pages->search({
+                    'parent.blog' => 1,
+                    'me.created' => {
+                        -between => [
+                            $dtf->format_datetime($start_date),
+                            $dtf->format_datetime($end_date)
+                        ]
+                    },
+                    'me.status' => 'published',
+                },
+                {
+                    join => 'parent',
+                    page => $c->req->query_params->{page} ? $c->req->query_params->{page} : 1,
+                    rows => 3,
+                    order_by => {'-asc' => "priority"}
+                });
+
+                $c->stash->{archived_date} = $arc;
+                $c->stash->{archived} = $archived;
+            }    
+
             my $blogs = $site->pages->attribute_search({ 'blog_category' => { '!=' => undef } }); 
 
             if ($blogs->count > 0) {
                 my %categories;
+                my $dates = {}; # DT => blog
                 for my $blog ($blogs->all) {
                     my $attr = $blog->attribute('blog_category');
                     if (defined $attr) {
+                        my ($month, $year) = ($blog->created->month_name, $blog->created->year);
+                        my $date = "${month} ${year}";
+                        if ($dates->{$date}) {
+                            push @{$dates->{$date}}, $blog->id;
+                        }
+                        else {
+                            $dates->{$date} = [];
+                            push @{$dates->{$date}}, $blog->id;
+                        }
                         if ($categories{"$attr"}) {
                             $categories{"$attr"} = $categories{"$attr"}+1;
                         }
@@ -40,6 +96,7 @@ sub preprocess {
                     }
                 }
 
+                $c->stash->{archives} = $dates;
                 $c->stash->{categories} = \%categories; 
             }
         }
