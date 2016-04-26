@@ -20,7 +20,7 @@ sub preprocess {
     my ($self, $c, $me) = @_;
     my $site = $me->site;
     
-    if ($c->config->{apperta_site}) {
+    if ($c->config->{extra_blog_functionality}) {
         # BLOGS
         
         if ($me->blog or ($me->parent and $me->parent->blog)) {
@@ -51,6 +51,7 @@ sub preprocess {
                 my $dtf = $c->model('CMS::Page')->result_source->schema->storage->datetime_parser;
                 my $archived = $site->pages->search({
                     'parent.blog' => 1,
+                    'parent.id'   => $me->parent ? $me->parent->id : $me->id,
                     'me.created' => {
                         -between => [
                             $dtf->format_datetime($start_date),
@@ -63,14 +64,25 @@ sub preprocess {
                     join => 'parent',
                     page => $c->req->query_params->{page} ? $c->req->query_params->{page} : 1,
                     rows => 3,
-                    order_by => {'-asc' => "priority"}
+                    order_by => {'-desc' => "created"}
                 });
 
                 $c->stash->{archived_date} = $arc;
                 $c->stash->{archived} = $archived;
             }    
 
-            my $blogs = $site->pages->attribute_search({ 'blog_category' => { '!=' => undef } }); 
+            #my $blogs = $site->pages->attribute_search({ 'blog_category' => { '!=' => undef } }); 
+
+            my $res_obj = $me->parent ? $me->parent : $me;
+            my $blogs   = $res_obj->parent ? $res_obj->parent->children : $res_obj->children;
+            #my $blogs = $site->pages->search({
+            #    'parent.blog'   => 1,
+            #    'parent.id'   => $me->parent ? $me->parent->id : $me->id,
+            #},
+            #{
+            #    join => 'parent',
+            #    order_by => { '-desc' => 'created' },
+            #});
 
             if ($blogs->count > 0) {
                 my %categories;
