@@ -80,10 +80,10 @@ sub post_update
 
     $c->log->debug($c->user->prf_get('community_admin'));
     unless ($c->user->prf_get('community_admin')) {
-        $c->detach('/not_found');
+        $c->go('/not_found');
     }
     unless ($c->user->member_of_community($community_code)) {
-        $c->detach('/not_found');
+        $c->go('/not_found');
     }
 
     my ($com_page) = $site->pages->attribute_search($site->id, {
@@ -93,7 +93,7 @@ sub post_update
     unless ($com_page) {
         # Somehow became a member of a community with no page?
         $c->log->debug("No page was found for community $community_code");
-        $c->detach('/not_found');
+        $c->go('/not_found');
     }
 
     my $form = Code4Health::DB::Form::Communities::PostUpdate->new;
