@@ -1,5 +1,9 @@
 {{ $NEXT }}
 
+0.22      2016-10-21 16:29:14+01:00 Europe/London
+
+    - Created behaviour for posting community updates
+
 0.21      2016-08-02 17:20:13+01:00 Europe/London
 
     - Converted to dzil
