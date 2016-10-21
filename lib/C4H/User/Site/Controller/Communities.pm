@@ -100,39 +100,53 @@ sub post_update
     $form->process($c->req->params);
 
     if ($form->validated) {
-        my $url = $form->field('title')->value =~ s/[^a-z0-9_]+/-/gri;
-        $url = $com_page->url . '/' . $url;
-        $url = lc $url;
+        if (exists $c->req->body_params->{preview}) {
+            my $preview = {
+                h1 => $form->field('title')->value,
+                created => DateTime->now,
+                content => markdown( $form->field('update')->value ),
+                future_plans => markdown( $form->field('future_plans')->value ),
+                community_help => markdown( $form->field('help')->value ),
+            };
 
-        my $page = $c->model('CMS::Page')->create({
-            url         => $url,
-            description => $form->field('title')->value,
-            title       => $form->field('title')->value,
-            h1          => $form->field('title')->value,
-            breadcrumb  => $form->field('title')->value,
-            parent_id   => $com_page->id,
-            markup_type => 'Markdown',
-            site        => $site->id,
-            status      => 'published',
-            blog        => 0,
-            content_type => 'text/html',
-        });
+            $c->stash->{preview_post} = $preview;
+        }
+        else {
+            my $url = $form->field('title')->value =~ s/[^a-z0-9_]+/-/gri;
+            $url = $com_page->url . '/' . $url;
+            $url = lc $url;
 
-        my $content = $form->field('update')->value;
-        $page->set_content($content);
-        my $attr = $site->page_attribute_details->find({ code => 'future_plans' });
-        $page->create_related('attribute_values', {
-            value => markdown( $form->field('future_plans')->value ),
-            field_id => $attr->id,
-        });
+            my $page = $c->model('CMS::Page')->create({
+                url         => $url,
+                description => $form->field('title')->value,
+                title       => $form->field('title')->value,
+                h1          => $form->field('title')->value,
+                breadcrumb  => $form->field('title')->value,
+                template_id => $com_page->template_id,
+                parent_id   => $com_page->id,
+                markup_type => 'Markdown',
+                site        => $site->id,
+                status      => 'published',
+                blog        => 0,
+                content_type => 'text/html',
+            });
 
-        $attr = $site->page_attribute_details->find({ code => 'community_help' });
+            my $content = $form->field('update')->value;
+            $page->set_content($content);
+            my $attr = $site->page_attribute_details->find({ code => 'future_plans' });
+            $page->create_related('attribute_values', {
+                value => markdown( $form->field('future_plans')->value ),
+                field_id => $attr->id,
+            });
 
-        $page->create_related('attribute_values', {
-            value => markdown( $form->field('help')->value ),
-            field_id => $attr->id,
-        });
-        $c->res->redirect($com_page->url);
+            $attr = $site->page_attribute_details->find({ code => 'community_help' });
+
+            $page->create_related('attribute_values', {
+                value => markdown( $form->field('help')->value ),
+                field_id => $attr->id,
+            });
+            $c->res->redirect($com_page->url);
+        }
     }
 
     $c->stash->{render_form} = $form->render;
