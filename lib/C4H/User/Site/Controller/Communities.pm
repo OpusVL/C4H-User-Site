@@ -78,8 +78,7 @@ sub post_update
     my $site = $root_controller->_get_site($c);
     my $community_code = $c->req->query_params->{community_code};
 
-    $c->log->debug($c->user->prf_get('community_admin'));
-    unless ($c->user->prf_get('community_admin')) {
+    unless ($c->user->is_community_admin) {
         $c->go('/not_found');
     }
     unless ($c->user->member_of_community($community_code)) {
