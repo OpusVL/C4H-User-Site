@@ -1,5 +1,8 @@
 {{ $NEXT }}
 
+0.23      2016-10-24 13:51:23+01:00 Europe/London
+    - Updated community update posting to check new user flag as authorisation
+
 0.22      2016-10-21 16:29:14+01:00 Europe/London
 
     - Created behaviour for posting community updates
