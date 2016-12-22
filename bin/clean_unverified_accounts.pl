@@ -20,29 +20,23 @@ my $people_rs = $schema->resultset('Person')->search({
 });
 
 my %delete;
-my %keep;
+my $keep_count = 0;
 
 while (my $person = $people_rs->next) {
     if($person->is_verified) {
-        $keep{$person->id} = $person;
+        $keep_count++;
     }
     else {
         $delete{$person->id} = $person;
     }
 }
 
-say "KEEPING:";
-for my $person_id (keys %keep) {
-    my $groups = $keep{$person_id}->groups;
-    say $person_id, "\t\t\t", "@$groups";
-}
-say scalar keys %keep, " KEPT";
 
-say "DELETING:";
+say "DELETE";
 for my $person_id (keys %delete) {
     my $groups = $delete{$person_id}->groups;
-    say $person_id, "\t\t\t", "@$groups";
-
-    $delete{$person_id}->delete if $options{commit};
+    say $person_id,  "\t", $delete{$person_id}->email_address, "\t\t\t", "@$groups";
 }
-say scalar keys %delete, " DELETED";
+say "";
+say $keep_count, " TO KEEP";
+say scalar keys %delete, " TO DELETE";
