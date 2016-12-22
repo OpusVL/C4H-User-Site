@@ -1,5 +1,10 @@
 {{ $NEXT }}
 
+0.24      2016-12-22 13:06:57+00:00 Europe/London
+
+    - Added missing dependencies
+    - Created script to remove unverified accounts
+
 0.23      2016-10-24 13:51:23+01:00 Europe/London
     - Updated community update posting to check new user flag as authorisation
 
