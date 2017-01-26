@@ -17,12 +17,16 @@ while (my $input = readline) {
     # Stop at first blank
     last if $input !~ /\S/;
 
-    my ($id, $email) = split ' ', $input;
-    my $person = $people_rs->find($id);
-    say "Not deleting $id because email $email does not match."
-        and next
-        unless $email eq $person->email_address;
+    my ($id, $email) = split ' ', $input, 3;
+    my $person = $people_rs->search({
+        id => $id,
+        email => $email
+    });
 
-    $person->delete;
-    say "Deleted $id [$email] (@{ $person->groups })";
+    if ($person->delete) {
+        say "Deleted $id [$email] (@{ $person->groups })";
+    }
+    else {
+        say "Not deleting $id because $email did not match";
+    }
 }

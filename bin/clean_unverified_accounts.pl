@@ -31,11 +31,9 @@ while (my $person = $people_rs->next) {
     }
 }
 
-
-say "DELETE";
 for my $person_id (keys %delete) {
     my $groups = $delete{$person_id}->groups;
-    say $person_id,  "\t", $delete{$person_id}->email_address, "\t\t\t", "@$groups";
+    say $person_id,  "\t", $delete{$person_id}->email_address, "\t\t\t", "[@$groups]";
 }
 say "";
 say $keep_count, " TO KEEP";
