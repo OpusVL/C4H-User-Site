@@ -1,5 +1,10 @@
 {{ $NEXT }}
 
+0.25      2017-01-26 16:02:46+00:00 Europe/London
+
+    - Account cleanup script is now two scripts
+    - And actually works properly
+
 0.24      2016-12-22 13:06:57+00:00 Europe/London
 
     - Added missing dependencies
