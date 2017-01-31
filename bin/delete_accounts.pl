@@ -18,9 +18,9 @@ while (my $input = readline) {
     last if $input !~ /\S/;
 
     my ($id, $email) = split ' ', $input, 3;
-    my $person = $people_rs->search({
+    my $person = $people_rs->find({
         id => $id,
-        email => $email
+        email_address => $email
     });
 
     if ($person->delete) {
